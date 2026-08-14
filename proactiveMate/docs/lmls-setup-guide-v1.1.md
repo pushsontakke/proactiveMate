@@ -1,4 +1,4 @@
-# LMLS — Setup Guide (Windows / WSL2)
+# proactiveMate — Setup Guide (Windows / WSL2)
 
 > **Version:** 1.1 · **Applies to:** The Last-Minute Life Saver
 > **Stack (committed, see TSD v2.2 §B0 for rationale):** Next.js 16 · Django 5.2 LTS + **Django Ninja** · Python 3.13 · PostgreSQL · Docker
@@ -14,7 +14,7 @@
 - **Docker Desktop runs on the WSL2 backend anyway** — your tools should live where the engine lives.
 - **AI-generated code assumes Linux conventions** — on pure Windows you become the translation layer.
 
-**Golden rule:** the repo lives in the Linux filesystem (`~/code/lmls`), **never** `/mnt/c/...`. Cross-OS file access is 10–20× slower and breaks file watchers/HMR.
+**Golden rule:** the repo lives in the Linux filesystem (`~/code/proactiveMate`), **never** `/mnt/c/...`. Cross-OS file access is 10–20× slower and breaks file watchers/HMR.
 
 ---
 
@@ -63,7 +63,7 @@ uv --version && node -v && docker ps
 ## 3. Repository layout
 
 ```
-lmls/
+proactiveMate/
 ├─ backend/            # Django 5.2 LTS + Django Ninja
 │  ├─ config/          # settings, asgi.py
 │  ├─ apps/tasks/      # Task, AIInteraction models + api.py (Ninja router)
@@ -85,7 +85,7 @@ lmls/
 ### 4.1 Backend (Django + Ninja)
 
 ```bash
-mkdir -p ~/code/lmls && cd ~/code/lmls
+mkdir -p ~/code/proactiveMate && cd ~/code/proactiveMate
 uv init backend && cd backend
 uv add "django>=5.2,<6" django-ninja django-ninja-jwt \
        django-cors-headers django-environ django-ratelimit django-auditlog \
@@ -104,7 +104,7 @@ Ninja wiring (reference):
 from ninja import NinjaAPI
 from apps.tasks.api import router as tasks_router
 
-api = NinjaAPI(title="LMLS API", version="1", docs_url="/docs")
+api = NinjaAPI(title="proactiveMate API", version="1", docs_url="/docs")
 api.add_router("/tasks/", tasks_router)
 
 # config/urls.py
@@ -123,7 +123,7 @@ Endpoints are `async def` functions on routers; request/response schemas are the
 ### 4.2 Frontend (Next.js 16)
 
 ```bash
-cd ~/code/lmls
+cd ~/code/proactiveMate
 npx create-next-app@latest frontend --typescript --tailwind --app --turbopack
 cd frontend
 npx shadcn@latest init
@@ -222,13 +222,13 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_DB: lmls
-      POSTGRES_USER: lmls
-      POSTGRES_PASSWORD: lmls   # dev only — never reuse in prod
+      POSTGRES_DB: proactiveMate
+      POSTGRES_USER: proactiveMate
+      POSTGRES_PASSWORD: proactiveMate   # dev only — never reuse in prod
     ports: ["5432:5432"]
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U lmls"]
+      test: ["CMD-SHELL", "pg_isready -U proactiveMate"]
       interval: 5s
       retries: 10
 
@@ -240,7 +240,7 @@ services:
     build: ./backend
     env_file: .env
     environment:
-      DATABASE_URL: postgres://lmls:lmls@db:5432/lmls
+      DATABASE_URL: postgres://proactiveMate:proactiveMate@db:5432/proactiveMate
       REDIS_URL: redis://redis:6379/0
     ports: ["8000:8000"]
     depends_on:
