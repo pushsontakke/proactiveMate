@@ -97,9 +97,37 @@ uv run python manage.py migrate
 uv run python manage.py runserver   # http://localhost:8000
 ```
 
+```python
+#Create it in this order:
+mkdir -p apps/tasks
+touch apps/__init__.py
+uv run python manage.py startapp tasks apps/tasks
+​
+#Then edit apps/tasks/apps.py so the name reflects the nested path:
+class TasksConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.tasks"          # ← was "tasks"; must match the import path
+​
+#Register it in config/settings.py:
+INSTALLED_APPS = [
+    # ... django defaults ...
+    "ninja_jwt",
+    "apps.tasks",
+]
+```
+
 Ninja wiring (reference):
 
 ```python
+#apps/tasks/api.py
+from ninja import Router
+
+router = Router(tags=["tasks"])
+
+@router.get("/ping/")
+async def ping(request):
+    return {"status": "ok"}
+
 # config/api.py
 from ninja import NinjaAPI
 from apps.tasks.api import router as tasks_router
@@ -117,6 +145,16 @@ urlpatterns = [
     path("api/v1/", api.urls),      # interactive docs at /api/v1/docs
 ]
 ```
+
+```python
+#Then open pyproject.toml — if there's a [build-system] section, delete it too, or add this so uv treats the project as an app, not an installable package:
+[tool.uv]
+package = false
+
+#(If uv sync runs clean afterward, you're done.)
+```
+
+### Notice: when you get to Docker, change the base images from python:3.13-slim to python:3.14-slim in the Dockerfile. Because in project python 3.14 is in use.
 
 Endpoints are `async def` functions on routers; request/response schemas are the same Pydantic models used by the LLM service layer (TSD §B4).
 
@@ -224,7 +262,7 @@ services:
     environment:
       POSTGRES_DB: proactiveMate
       POSTGRES_USER: proactiveMate
-      POSTGRES_PASSWORD: proactiveMate   # dev only — never reuse in prod
+      POSTGRES_PASSWORD: proactiveMate # dev only — never reuse in prod
     ports: ["5432:5432"]
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
