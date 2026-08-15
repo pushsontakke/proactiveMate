@@ -23,9 +23,6 @@ dependencies = [
     "uvicorn[standard]>=0.52.3",
 ]
 
-[project.scripts]
-backend = "backend:main"
-
 [tool.uv]
 package = false
 
