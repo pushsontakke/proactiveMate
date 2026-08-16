@@ -96,7 +96,7 @@ export function DashboardView() {
               </section>
             </section>
 
-            <aside className="col-span-12 space-y-8 lg:col-span-4">
+            <aside className="col-span-12 space-y-8 lg:sticky lg:top-6 lg:col-span-4 lg:self-start">
               {rescueQuery.isPending ? <SkeletonLine className="h-96 w-full rounded-2xl" /> : rescueQuery.isError ? (
                 <section className="surface-card p-6"><h2 className="font-semibold">Rescue Mode</h2><p className="mt-2 text-sm leading-6 text-ink-muted">The rescue canvas couldn&apos;t refresh. Your current plan has not moved.</p><button type="button" onClick={() => void rescueQuery.refetch()} className="mt-5 min-h-11 rounded-full border border-clay px-4 text-sm font-medium">Try again</button></section>
               ) : <RescuePanel plan={rescueQuery.data.data} tasks={tasks} onApplied={setYieldedIds} />}

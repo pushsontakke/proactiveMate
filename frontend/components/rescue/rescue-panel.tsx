@@ -32,7 +32,7 @@ export function RescuePanel({ plan, tasks, onApplied }: RescuePanelProps) {
   }
 
   return (
-    <section className="surface-card p-5 sm:p-6 lg:sticky lg:top-6" aria-labelledby="rescue-title">
+    <section className="surface-card p-5 sm:p-6" aria-labelledby="rescue-title">
       <div className="flex items-center justify-between gap-4">
         <h2 id="rescue-title" className="font-semibold tracking-[-0.02em]">Rescue Mode</h2>
         <Link href="/rescue" className="min-h-9 rounded-full px-2 py-2 text-xs font-medium text-ink-muted hover:text-ink">Full view</Link>
