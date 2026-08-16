@@ -18,6 +18,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: { default: "ProactiveMate", template: "%s · ProactiveMate" },
   description: "A calm AI planner for ranking tasks, protecting focus, and rescuing busy days.",
+  icons: { icon: "/icon.svg" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
