@@ -381,6 +381,12 @@ export const mockApi: ProactiveMateApi = {
   },
 
   async getRescuePlan() {
+    if (currentMode() === "empty") {
+      return respond<RescuePlan>({
+        items: [],
+        summary: "Everything already fits the time available.",
+      });
+    }
     return respond<RescuePlan>({
       items: rescueItems(),
       summary: "Three deliberate moves recover the day without sacrificing the work that matters most.",

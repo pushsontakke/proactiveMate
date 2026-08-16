@@ -123,13 +123,21 @@ export function NewTaskForm() {
                 ) : preview.isError ? (
                   <div><p role="alert" className="text-sm leading-6 text-ink-muted">AI couldn&apos;t split this one just now. You can still save it as a single task.</p><button type="button" onClick={requestPreview} className="mt-3 min-h-10 rounded-full border border-clay px-4 text-xs font-medium">Try preview again</button></div>
                 ) : preview.data ? (
-                  <ol className="space-y-2">
-                    {preview.data.data.map((step, index) => (
-                      <motion.li key={step.title} initial={reduceMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : index * 0.05 }} className="rounded-lg border border-clay/20 bg-white/45 p-3">
-                        <p className="text-sm font-medium">{step.title}</p><p className="mt-1 font-mono text-[0.68rem] text-ink-muted">{formatDuration(step.effort_min)} · due {formatDateTime(step.due_at)}</p>
-                      </motion.li>
-                    ))}
-                  </ol>
+                  <div>
+                    {preview.data.ai_meta.degraded ? (
+                      <p className="mb-3 flex items-center gap-2 rounded-lg border border-clay/30 bg-white/45 px-3 py-2 text-xs text-ink-muted">
+                        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+                        AI is resting; these steps use deterministic planning.
+                      </p>
+                    ) : null}
+                    <ol className="space-y-2">
+                      {preview.data.data.map((step, index) => (
+                        <motion.li key={step.title} initial={reduceMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : index * 0.05 }} className="rounded-lg border border-clay/20 bg-white/45 p-3">
+                          <p className="text-sm font-medium">{step.title}</p><p className="mt-1 font-mono text-[0.68rem] text-ink-muted">{formatDuration(step.effort_min)} · due {formatDateTime(step.due_at)}</p>
+                        </motion.li>
+                      ))}
+                    </ol>
+                  </div>
                 ) : (
                   <div><p className="text-sm leading-6 text-ink-muted">Add a title and deadline, then preview the plan.</p><button type="button" disabled={!title.trim() || !dueAt} onClick={requestPreview} className="mt-3 min-h-10 rounded-full border border-clay px-4 text-xs font-medium disabled:opacity-40">Preview steps</button></div>
                 )}

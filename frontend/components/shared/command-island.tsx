@@ -119,20 +119,28 @@ export function CommandIsland() {
                     We couldn&apos;t shape that plan just now. Your words are still here—try again when ready.
                   </p>
                 ) : decomposition.data ? (
-                  decomposition.data.data.map((step, index) => (
-                    <motion.div
-                      key={step.title}
-                      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: reduceMotion ? 0 : index * 0.05 }}
-                      className="rounded-lg py-2 text-sm"
-                    >
-                      <p className="font-medium text-canvas">{step.title}</p>
-                      <p className="mt-0.5 font-mono text-[0.68rem] text-canvas/45">
-                        {formatDuration(step.effort_min)} · {formatDateTime(step.due_at)}
+                  <>
+                    {decomposition.data.ai_meta.degraded ? (
+                      <p className="mb-2 flex items-center gap-2 rounded-lg border border-canvas/10 bg-white/5 px-3 py-2 text-xs text-canvas/60">
+                        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+                        Built with the safe fallback planner.
                       </p>
-                    </motion.div>
-                  ))
+                    ) : null}
+                    {decomposition.data.data.map((step, index) => (
+                      <motion.div
+                        key={step.title}
+                        initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: reduceMotion ? 0 : index * 0.05 }}
+                        className="rounded-lg py-2 text-sm"
+                      >
+                        <p className="font-medium text-canvas">{step.title}</p>
+                        <p className="mt-0.5 font-mono text-[0.68rem] text-canvas/45">
+                          {formatDuration(step.effort_min)} · {formatDateTime(step.due_at)}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </>
                 ) : (
                   exampleOutcomes.map((example) => (
                     <button

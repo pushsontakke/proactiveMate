@@ -1,6 +1,7 @@
 "use client";
 
 import { RotateCcw } from "lucide-react";
+import Link from "next/link";
 
 export function SkeletonLine({ className = "" }: { className?: string }) {
   return <div aria-hidden="true" className={`animate-pulse rounded-lg bg-clay/20 ${className}`} />;
@@ -46,5 +47,5 @@ export function EmptyTasksState() {
 }
 
 function LinkButton() {
-  return <a href="/tasks/new" className="mt-6 inline-flex min-h-11 items-center rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas">Add your first task</a>;
+  return <Link href="/tasks/new" className="mt-6 inline-flex min-h-11 items-center rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas">Add your first task</Link>;
 }
