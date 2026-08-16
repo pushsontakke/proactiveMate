@@ -64,6 +64,36 @@ select:focus-visible {
   backdrop-filter: blur(6px);
 }
 
+.liquid-focus {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.liquid-focus::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background: var(--color-amber);
+  transform: translateY(100%);
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-focus:hover::before,
+.liquid-focus[data-active="true"]::before {
+  transform: translateY(0);
+}
+
+.liquid-focus > span {
+  transition: color 400ms ease;
+}
+
+.liquid-focus:hover > span,
+.liquid-focus[data-active="true"] > span {
+  color: var(--color-canvas);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
